@@ -45,4 +45,24 @@ class GravityFormsAddonTest extends TestCase {
 
         $this->assertFalse( $validated['is_valid'] );
     }
+
+    public function testElevenDigitsWithBadChecksumIsRejected(): void {
+        $field = new \stdClass();
+        $field->cssClass = 'abn_input';
+
+        $result = [ 'is_valid' => true, 'message' => '' ];
+        $validated = GravityFormsAddon::validate_australian_business_number( $result, '12345678901', [], $field );
+
+        $this->assertFalse( $validated['is_valid'] );
+    }
+
+    public function testFieldsWithoutAbnClassAreIgnored(): void {
+        $field = new \stdClass();
+        $field->cssClass = 'some_other_field';
+
+        $result = [ 'is_valid' => true, 'message' => '' ];
+        $validated = GravityFormsAddon::validate_australian_business_number( $result, 'not-an-abn', [], $field );
+
+        $this->assertTrue( $validated['is_valid'] );
+    }
 }

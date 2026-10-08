@@ -52,3 +52,15 @@ if ( ! function_exists( 'is_admin' ) ) {
         return false;
     }
 }
+
+if ( ! function_exists( '__' ) ) {
+    function __( $text, $domain = 'default' ) {
+        return $text;
+    }
+}
+
+if ( ! function_exists( 'wp_doing_ajax' ) ) {
+    function wp_doing_ajax() {
+        return false;
+    }
+}

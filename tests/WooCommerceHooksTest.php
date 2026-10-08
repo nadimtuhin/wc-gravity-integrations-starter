@@ -42,4 +42,29 @@ class WooCommerceHooksTest extends TestCase {
         WooCommerceHooks::add_conditional_environmental_fee( $cart );
         $this->assertCount( 0, $cart->fees );
     }
+
+    public function testDeliveryNotesAreSanitizedOntoOrderMeta(): void {
+        $order = $this->fake_order();
+
+        WooCommerceHooks::save_delivery_notes( $order, [ 'billing_delivery_notes' => '  <b>Gate 4521</b>  ' ] );
+
+        $this->assertSame( 'Gate 4521', $order->meta['_billing_delivery_notes'] );
+    }
+
+    public function testEmptyDeliveryNotesAreNotSaved(): void {
+        $order = $this->fake_order();
+
+        WooCommerceHooks::save_delivery_notes( $order, [] );
+
+        $this->assertSame( [], $order->meta );
+    }
+
+    private function fake_order() {
+        return new class {
+            public $meta = [];
+            public function update_meta_data( $key, $value ) {
+                $this->meta[ $key ] = $value;
+            }
+        };
+    }
 }

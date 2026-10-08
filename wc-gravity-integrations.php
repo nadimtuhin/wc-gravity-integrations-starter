@@ -13,11 +13,11 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
-    require_once __DIR__ . '/vendor/autoload.php';
+	require_once __DIR__ . '/vendor/autoload.php';
 }
 
 require_once __DIR__ . '/includes/class-woocommerce-hooks.php';
@@ -27,7 +27,10 @@ require_once __DIR__ . '/includes/class-db-manager.php';
 
 register_activation_hook( __FILE__, [ '\WCGravityIntegrations\DbManager', 'migrate' ] );
 
-add_action( 'plugins_loaded', function() {
-    \WCGravityIntegrations\WooCommerceHooks::init();
-    \WCGravityIntegrations\GravityFormsAddon::init();
-} );
+add_action(
+	'plugins_loaded',
+	function () {
+		\WCGravityIntegrations\WooCommerceHooks::init();
+		\WCGravityIntegrations\GravityFormsAddon::init();
+	}
+);

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<ruleset name="wc-gravity-integrations-starter">
+	<description>WordPress Coding Standards for wc-gravity-integrations-starter.</description>
+
+	<file>.</file>
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/assets/*</exclude-pattern>
+	<exclude-pattern>/tests/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+
+	<config name="testVersion" value="7.4-"/>
+	<config name="minimum_wp_version" value="5.8"/>
+
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress-Extra">
+		<!-- Modern [] arrays are an intentional house style. -->
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+		<!-- PSR-4 namespaced classes live in class-{slug}.php without the namespace in the file name. -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="wc-gf-integrations"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>
