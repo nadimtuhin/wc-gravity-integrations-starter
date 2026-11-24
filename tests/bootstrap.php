@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 if ( ! defined( 'ABSPATH' ) ) {
-    define( 'ABSPATH', __DIR__ . '/../' );
+    define( 'ABSPATH', __DIR__ . '/fixtures/wordpress/' );
 }
 
 // Lightweight stubs for unit testing outside full WP runtime
@@ -22,6 +22,7 @@ if ( ! function_exists( 'add_filter' ) ) {
 
 if ( ! function_exists( 'wp_remote_post' ) ) {
     function wp_remote_post( $url, $args ) {
+        $GLOBALS['wc_gf_test_http_calls'][] = [ 'fn' => 'wp_remote_post', 'url' => $url ];
         return [
             'response' => [ 'code' => 200 ],
             'body'     => json_encode( [ 'success' => true ] ),
@@ -62,5 +63,21 @@ if ( ! function_exists( '__' ) ) {
 if ( ! function_exists( 'wp_doing_ajax' ) ) {
     function wp_doing_ajax() {
         return false;
+    }
+}
+
+if ( ! function_exists( 'wp_json_encode' ) ) {
+    function wp_json_encode( $data ) {
+        return json_encode( $data );
+    }
+}
+
+if ( ! function_exists( 'wp_safe_remote_post' ) ) {
+    function wp_safe_remote_post( $url, $args ) {
+        $GLOBALS['wc_gf_test_http_calls'][] = [ 'fn' => 'wp_safe_remote_post', 'url' => $url ];
+        return [
+            'response' => [ 'code' => 200 ],
+            'body'     => json_encode( [ 'success' => true ] ),
+        ];
     }
 }

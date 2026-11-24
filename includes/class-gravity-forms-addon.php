@@ -26,7 +26,7 @@ class GravityFormsAddon {
 	}
 
 	/**
-	 * Validate fields with the `abn_input` CSS class as an Australian Business Number.
+	 * Validate fields carrying the `abn_input` CSS class (among any others) as an Australian Business Number.
 	 *
 	 * @param array     $result Validation result with `is_valid` and `message`.
 	 * @param mixed     $value  Submitted value.
@@ -36,9 +36,9 @@ class GravityFormsAddon {
 	 */
 	public static function validate_australian_business_number( array $result, $value, $form, $field ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed -- Signature fixed by gform_field_validation.
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Gravity Forms property.
-		$css_class = (string) ( $field->cssClass ?? '' );
+		$css_classes = preg_split( '/\s+/', (string) ( $field->cssClass ?? '' ), -1, PREG_SPLIT_NO_EMPTY );
 
-		if ( self::ABN_FIELD_CSS_CLASS !== $css_class || empty( $value ) ) {
+		if ( ! in_array( self::ABN_FIELD_CSS_CLASS, $css_classes, true ) || empty( $value ) ) {
 			return $result;
 		}
 

@@ -1,5 +1,18 @@
 <?php
-namespace WCGravityIntegrations\Tests;
+namespace Automattic\WooCommerce\Utilities {
+    if ( ! class_exists( FeaturesUtil::class ) ) {
+        // Test double for WooCommerce's FeaturesUtil: records compatibility declarations.
+        class FeaturesUtil {
+            public static $declared = [];
+            public static function declare_compatibility( $feature_id, $plugin_file, $positive_compatibility = true ) {
+                self::$declared[] = [ $feature_id, $plugin_file, $positive_compatibility ];
+                return true;
+            }
+        }
+    }
+}
+
+namespace WCGravityIntegrations\Tests {
 
 use PHPUnit\Framework\TestCase;
 use WCGravityIntegrations\WooCommerceHooks;
@@ -59,6 +72,17 @@ class WooCommerceHooksTest extends TestCase {
         $this->assertSame( [], $order->meta );
     }
 
+    public function testDeclaresHposCompatibility(): void {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::$declared = [];
+
+        WooCommerceHooks::declare_hpos_compatibility( '/plugins/wc-gravity-integrations/wc-gravity-integrations.php' );
+
+        $this->assertSame(
+            [ [ 'custom_order_tables', '/plugins/wc-gravity-integrations/wc-gravity-integrations.php', true ] ],
+            \Automattic\WooCommerce\Utilities\FeaturesUtil::$declared
+        );
+    }
+
     private function fake_order() {
         return new class {
             public $meta = [];
@@ -67,4 +91,5 @@ class WooCommerceHooksTest extends TestCase {
             }
         };
     }
+}
 }
