@@ -65,4 +65,14 @@ class GravityFormsAddonTest extends TestCase {
 
         $this->assertTrue( $validated['is_valid'] );
     }
+
+    public function testAbnFieldWithSeveralCssClassesIsStillValidated(): void {
+        $field = new \stdClass();
+        $field->cssClass = 'gf_left_half  abn_input';
+
+        $result = [ 'is_valid' => true, 'message' => '' ];
+        $validated = GravityFormsAddon::validate_australian_business_number( $result, '12345678901', [], $field );
+
+        $this->assertFalse( $validated['is_valid'] );
+    }
 }

@@ -33,6 +33,19 @@ class WooCommerceHooks {
 	}
 
 	/**
+	 * Declare compatibility with WooCommerce High-Performance Order Storage.
+	 *
+	 * All order data goes through the WC_Order CRUD API, never post meta.
+	 *
+	 * @param string $plugin_file Main plugin file.
+	 */
+	public static function declare_hpos_compatibility( string $plugin_file ): void {
+		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', $plugin_file, true );
+		}
+	}
+
+	/**
 	 * Add a delivery-notes field to the billing section.
 	 *
 	 * @param array $fields Checkout fields grouped by section.

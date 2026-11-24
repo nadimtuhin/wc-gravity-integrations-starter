@@ -12,7 +12,9 @@ class DbManager {
 		$table_name      = $wpdb->prefix . 'custom_sync_logs';
 		$charset_collate = $wpdb->get_charset_collate();
 
-		$sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+		// dbDelta() already skips existing tables and diffs columns; it cannot parse
+		// "IF NOT EXISTS" and requires two spaces after PRIMARY KEY.
+		$sql = "CREATE TABLE {$table_name} (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             source_type varchar(50) NOT NULL,
             source_id bigint(20) unsigned NOT NULL,
@@ -20,7 +22,7 @@ class DbManager {
             payload longtext NOT NULL,
             error_message text NULL,
             created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (id),
+            PRIMARY KEY  (id),
             KEY idx_status (status),
             KEY idx_source (source_type, source_id)
         ) {$charset_collate};";

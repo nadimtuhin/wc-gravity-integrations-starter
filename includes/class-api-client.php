@@ -20,7 +20,8 @@ class ApiClient {
 		];
 
 		for ( $attempt = 1; $attempt <= $this->max_retries; $attempt++ ) {
-			$response = wp_remote_post( $endpoint, $args );
+			// Endpoints come from filters; the safe variant rejects internal/private hosts and unsafe redirects.
+			$response = wp_safe_remote_post( $endpoint, $args );
 
 			if ( ! is_wp_error( $response ) ) {
 				$code = wp_remote_retrieve_response_code( $response );

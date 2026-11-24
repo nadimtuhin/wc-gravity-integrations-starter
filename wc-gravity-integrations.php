@@ -25,6 +25,13 @@ require_once __DIR__ . '/includes/class-gravity-forms-addon.php';
 require_once __DIR__ . '/includes/class-api-client.php';
 require_once __DIR__ . '/includes/class-db-manager.php';
 
+add_action(
+	'before_woocommerce_init',
+	function () {
+		\WCGravityIntegrations\WooCommerceHooks::declare_hpos_compatibility( __FILE__ );
+	}
+);
+
 register_activation_hook( __FILE__, [ '\WCGravityIntegrations\DbManager', 'migrate' ] );
 
 add_action(
